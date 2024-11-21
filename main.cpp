@@ -1,33 +1,37 @@
 #include <iostream>
 using namespace std;
 
-bool isPrime(int num) {
-    if (num <= 1) return false;
-    for (int i = 2; i * i <= num; ++i) {
-        if (num % i == 0) return false;
-    }
-    return true;
-}
+void distributeElements(int* arr, int size, int*& positiveArr, int& positiveSize, int*& negativeArr, int& negativeSize, int*& zeroArr, int& zeroSize) {
+    positiveSize = negativeSize = zeroSize = 0;
 
-int* removePrimes(int* arr, int& size) {
-    int newSize = 0;
     for (int i = 0; i < size; ++i) {
-        if (!isPrime(arr[i])) {
-            ++newSize;
+        if (arr[i] > 0) {
+            ++positiveSize;
+        }
+        else if (arr[i] < 0) {
+            ++negativeSize;
+        }
+        else {
+            ++zeroSize;
         }
     }
 
-    int* newArr = new int[newSize];
-    int j = 0;
+    positiveArr = new int[positiveSize];
+    negativeArr = new int[negativeSize];
+    zeroArr = new int[zeroSize];
+
+    int p = 0, n = 0, z = 0;
     for (int i = 0; i < size; ++i) {
-        if (!isPrime(arr[i])) {
-            newArr[j++] = arr[i];
+        if (arr[i] > 0) {
+            positiveArr[p++] = arr[i];
+        }
+        else if (arr[i] < 0) {
+            negativeArr[n++] = arr[i];
+        }
+        else {
+            zeroArr[z++] = arr[i];
         }
     }
-
-    delete[] arr;
-    size = newSize;
-    return newArr;
 }
 
 void printArray(const int* arr, int size) {
@@ -38,17 +42,29 @@ void printArray(const int* arr, int size) {
 }
 
 int main() {
-    int* arr = new int[6] {2, 3, 4, 5, 6, 7};
-    int size = 6;
+    int arr[] = { 1, -2, 0, 4, -5, 6, 0, -3 };
+    int size = 8;
 
-    cout << "Original array: ";
-    printArray(arr, size);
+    int* positiveArr = nullptr;
+    int* negativeArr = nullptr;
+    int* zeroArr = nullptr;
 
-    arr = removePrimes(arr, size);
+    int positiveSize, negativeSize, zeroSize;
 
-    cout << "Array after removing primes: ";
-    printArray(arr, size);
+    distributeElements(arr, size, positiveArr, positiveSize, negativeArr, negativeSize, zeroArr, zeroSize);
 
-    delete[] arr;
+    cout << "Positive elements: ";
+    printArray(positiveArr, positiveSize);
+
+    cout << "Negative elements: ";
+    printArray(negativeArr, negativeSize);
+
+    cout << "Zero elements: ";
+    printArray(zeroArr, zeroSize);
+
+    delete[] positiveArr;
+    delete[] negativeArr;
+    delete[] zeroArr;
+
     return 0;
 }
