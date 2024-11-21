@@ -1,37 +1,43 @@
 #include <iostream>
 using namespace std;
 
-void countElements(int* array, int size, int* negativeCount, int* positiveCount, int* zeroCount) {
-    *negativeCount = 0;
-    *positiveCount = 0;
-    *zeroCount = 0;
+int* isSubset(int* A, int sizeA, int* B, int sizeB) {
+    if (sizeB > sizeA) {
+        return nullptr;
+    }
 
-    for (int i = 0; i < size; ++i) {
-        if (array[i] < 0) {
-            (*negativeCount)++;
+    for (int i = 0; i <= sizeA - sizeB; ++i) {
+        bool isMatch = true;
+        for (int j = 0; j < sizeB; ++j) {
+            if (A[i + j] != B[j]) {
+                isMatch = false;
+                break;
+            }
         }
-        else if (array[i] > 0) {
-            (*positiveCount)++;
-        }
-        else {
-            (*zeroCount)++;
+        if (isMatch) {
+            return &A[i];
         }
     }
+
+    return nullptr;
 }
 
 int main() {
-    int arr[] = { 0, -1, 5, 0, -3, 4 };
-    int size = sizeof(arr) / sizeof(arr[0]);
+    int A[] = { 1, 2, 3, 4, 5, 6 };
+    int B[] = { 3, 4, 5 };
 
-    int negativeCount = 0;
-    int positiveCount = 0;
-    int zeroCount = 0;
+    int sizeA = sizeof(A) / sizeof(A[0]);
+    int sizeB = sizeof(B) / sizeof(B[0]);
 
-    countElements(arr, size, &negativeCount, &positiveCount, &zeroCount);
+    int* result = isSubset(A, sizeA, B, sizeB);
 
-    cout << "Amount of negative elements: " << negativeCount << endl;
-    cout << "Amount of positive elements: " << positiveCount << endl;
-    cout << "Amount of null elements: " << zeroCount << endl;
+    if (result) {
+        cout << "Array B is a subset of array A." << endl;
+        cout << "Starting position of the subset: " << (result - A) << endl;
+    }
+    else {
+        cout << "Array B is not a subset of array A." << endl;
+    }
 
     return 0;
 }
