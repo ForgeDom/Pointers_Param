@@ -1,43 +1,40 @@
 #include <iostream>
 using namespace std;
 
-int* isSubset(int* A, int sizeA, int* B, int sizeB) {
-    if (sizeB > sizeA) {
-        return nullptr;
-    }
-
-    for (int i = 0; i <= sizeA - sizeB; ++i) {
-        bool isMatch = true;
-        for (int j = 0; j < sizeB; ++j) {
-            if (A[i + j] != B[j]) {
-                isMatch = false;
-                break;
-            }
-        }
-        if (isMatch) {
-            return &A[i];
+int* removeNegatives(int* array, int size, int& newSize) {
+    newSize = 0;
+    for (int i = 0; i < size; ++i) {
+        if (array[i] >= 0) {
+            ++newSize;
         }
     }
 
-    return nullptr;
+    int* newArray = new int[newSize];
+    int index = 0;
+    for (int i = 0; i < size; ++i) {
+        if (array[i] >= 0) {
+            newArray[index++] = array[i];
+        }
+    }
+
+    return newArray;
 }
 
 int main() {
-    int A[] = { 1, 2, 3, 4, 5, 6 };
-    int B[] = { 3, 4, 5 };
+    int size = 6;
+    int* array = new int[size] {1, -3, 5, -7, 9, -11};
 
-    int sizeA = sizeof(A) / sizeof(A[0]);
-    int sizeB = sizeof(B) / sizeof(B[0]);
+    int newSize;
+    int* filteredArray = removeNegatives(array, size, newSize);
 
-    int* result = isSubset(A, sizeA, B, sizeB);
-
-    if (result) {
-        cout << "Array B is a subset of array A." << endl;
-        cout << "Starting position of the subset: " << (result - A) << endl;
+    cout << "New array: ";
+    for (int i = 0; i < newSize; ++i) {
+        cout << filteredArray[i] << " ";
     }
-    else {
-        cout << "Array B is not a subset of array A." << endl;
-    }
+    cout << endl;
+
+    delete[] array;
+    delete[] filteredArray;
 
     return 0;
 }
