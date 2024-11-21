@@ -1,49 +1,24 @@
 #include <iostream>
 using namespace std;
 
-int* insertBlock(int* array, int size, int* block, int blockSize, int index, int& newSize) {
-    if (index < 0 || index > size) {
-        cout << "Invalid index." << endl;
-        return nullptr;
+void removeBlock(int arr[], int& size, int startIdx, int blockSize) {
+    for (int i = startIdx; i < size - blockSize; ++i) {
+        arr[i] = arr[i + blockSize];
     }
-
-    newSize = size + blockSize;
-    int* newArray = new int[newSize];
-
-    for (int i = 0; i < index; ++i) {
-        newArray[i] = array[i];
-    }
-    for (int i = 0; i < blockSize; ++i) {
-        newArray[index + i] = block[i];
-    }
-    for (int i = index; i < size; ++i) {
-        newArray[i + blockSize] = array[i];
-    }
-
-    return newArray;
+    size -= blockSize;
 }
 
 int main() {
-    int size = 5;
-    int* array = new int[size] {1, 2, 3, 4, 5};
+    int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    int size = 8;
+    int startIdx = 2;
     int blockSize = 3;
-    int* block = new int[blockSize] {10, 20, 30};
 
-    int index = 2;
-    int newSize;
-    int* updatedArray = insertBlock(array, size, block, blockSize, index, newSize);
+    removeBlock(arr, size, startIdx, blockSize);
 
-    if (updatedArray) {
-        cout << "Updated array: ";
-        for (int i = 0; i < newSize; ++i) {
-            cout << updatedArray[i] << " ";
-        }
-        cout << endl;
+    for (int i = 0; i < size; ++i) {
+        cout << arr[i] << " ";
     }
-
-    delete[] array;
-    delete[] block;
-    delete[] updatedArray;
 
     return 0;
 }
