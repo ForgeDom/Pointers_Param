@@ -1,40 +1,38 @@
 #include <iostream>
 using namespace std;
 
-int* removeNegatives(int* array, int size, int& newSize) {
-    newSize = 0;
-    for (int i = 0; i < size; ++i) {
-        if (array[i] >= 0) {
-            ++newSize;
-        }
-    }
-
+int* appendBlock(int* array, int size, int* block, int blockSize, int& newSize) {
+    newSize = size + blockSize;
     int* newArray = new int[newSize];
-    int index = 0;
+
     for (int i = 0; i < size; ++i) {
-        if (array[i] >= 0) {
-            newArray[index++] = array[i];
-        }
+        newArray[i] = array[i];
+    }
+    for (int i = 0; i < blockSize; ++i) {
+        newArray[size + i] = block[i];
     }
 
     return newArray;
 }
 
 int main() {
-    int size = 6;
-    int* array = new int[size] {1, -3, 5, -7, 9, -11};
+    int size = 5;
+    int* array = new int[size] {1, 2, 3, 4, 5};
+    int blockSize = 3;
+    int* block = new int[blockSize] {6, 7, 8};
 
     int newSize;
-    int* filteredArray = removeNegatives(array, size, newSize);
+    int* extendedArray = appendBlock(array, size, block, blockSize, newSize);
 
-    cout << "New array: ";
+    cout << "Extended array: ";
     for (int i = 0; i < newSize; ++i) {
-        cout << filteredArray[i] << " ";
+        cout << extendedArray[i] << " ";
     }
     cout << endl;
 
     delete[] array;
-    delete[] filteredArray;
+    delete[] block;
+    delete[] extendedArray;
 
     return 0;
 }
